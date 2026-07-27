@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}My Profile — SportTracker{% endblock %}
+
+{% block content %}
+<section class="page-section">
+  <div class="page-header">
+    <h1><i class="fa-solid fa-circle-user"></i> My Profile</h1>
+    <p>Manage your personal details and fitness goals.</p>
+  </div>
+
+  <div class="profile-card">
+    <form method="POST" class="profile-form">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" name="name" value="{{ user['name'] }}" required>
+        </div>
+        <div class="form-group">
+          <label for="email_display">Email</label>
+          <input type="email" id="email_display" value="{{ user['email'] }}" disabled>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="age">Age</label>
+          <input type="number" id="age" name="age" value="{{ user['age'] or '' }}" min="1" max="120">
+        </div>
+        <div class="form-group">
+          <label for="weight">Weight (kg)</label>
+          <input type="number" step="0.1" id="weight" name="weight" value="{{ user['weight'] or '' }}">
+        </div>
+        <div class="form-group">
+          <label for="height">Height (cm)</label>
+          <input type="number" step="0.1" id="height" name="height" value="{{ user['height'] or '' }}">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="daily_step_goal">Daily Step Goal</label>
+          <input type="number" id="daily_step_goal" name="daily_step_goal" value="{{ user['daily_step_goal'] or 10000 }}">
+        </div>
+        <div class="form-group">
+          <label for="daily_water_goal">Daily Water Goal (L)</label>
+          <input type="number" step="0.1" id="daily_water_goal" name="daily_water_goal" value="{{ user['daily_water_goal'] or 2.5 }}">
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

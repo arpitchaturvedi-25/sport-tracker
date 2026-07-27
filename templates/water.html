@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Water Tracker — SportTracker{% endblock %}
+
+{% block content %}
+<section class="page-section">
+  <div class="page-header">
+    <h1><i class="fa-solid fa-droplet"></i> Water Tracker</h1>
+    <p>Stay hydrated. Log your water intake for today.</p>
+  </div>
+
+  <div class="water-layout">
+    <div class="water-progress-card">
+      <div class="water-circle" style="--progress: {{ progress }}">
+        <span class="water-circle-value">{{ progress }}%</span>
+      </div>
+      <p>{{ "%.1f"|format(activity['water_liters'] or 0) }} L of {{ water_goal }} L goal</p>
+
+      <form method="POST" class="water-add-form">
+        <div class="quick-add-buttons">
+          <button type="submit" name="amount" value="0.25" class="btn btn-outline">+250 ml</button>
+          <button type="submit" name="amount" value="0.5" class="btn btn-outline">+500 ml</button>
+          <button type="submit" name="amount" value="1" class="btn btn-outline">+1 L</button>
+        </div>
+        <div class="form-group inline-form">
+          <input type="number" step="0.1" name="amount" placeholder="Custom amount (L)">
+          <button type="submit" class="btn btn-primary">Add</button>
+        </div>
+      </form>
+    </div>
+
+    <div class="dashboard-panel">
+      <h3><i class="fa-solid fa-list"></i> Today's Log</h3>
+      {% if logs %}
+      <div class="table-wrap">
+        <table class="data-table">
+          <thead><tr><th>Time</th><th>Amount</th></tr></thead>
+          <tbody>
+            {% for log in logs %}
+            <tr>
+              <td>{{ log['logged_at'] }}</td>
+              <td>{{ log['amount_liters'] }} L</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <p class="empty-state">No water logged yet today.</p>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}
