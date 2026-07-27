@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}Dashboard — SportTracker{% endblock %}
+
+{% block content %}
+<section class="page-section">
+  <div class="page-header">
+    <h1>Welcome back, {{ user['name'].split(' ')[0] }} <i class="fa-solid fa-hand-wave"></i></h1>
+    <p>Here's your fitness summary for today.</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card blue">
+      <div class="stat-icon"><i class="fa-solid fa-shoe-prints"></i></div>
+      <div class="stat-info">
+        <span class="stat-value">{{ activity['steps'] or 0 }}</span>
+        <span class="stat-label">Total Steps</span>
+      </div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-icon"><i class="fa-solid fa-route"></i></div>
+      <div class="stat-info">
+        <span class="stat-value">{{ "%.2f"|format(activity['distance_km'] or 0) }} km</span>
+        <span class="stat-label">Distance</span>
+      </div>
+    </div>
+    <div class="stat-card orange">
+      <div class="stat-icon"><i class="fa-solid fa-fire"></i></div>
+      <div class="stat-info">
+        <span class="stat-value">{{ "%.0f"|format(activity['calories'] or 0) }}</span>
+        <span class="stat-label">Calories Burned</span>
+      </div>
+    </div>
+    <div class="stat-card blue">
+      <div class="stat-icon"><i class="fa-solid fa-stopwatch"></i></div>
+      <div class="stat-info">
+        <span class="stat-value" id="runningTimeDisplay">{{ (activity['running_time_seconds'] or 0) // 60 }} min</span>
+        <span class="stat-label">Running Time</span>
+      </div>
+    </div>
+    <div class="stat-card green">
+      <div class="stat-icon"><i class="fa-solid fa-gauge-high"></i></div>
+      <div class="stat-info">
+        <span class="stat-value">
+          {% if activity['running_time_seconds'] %}
+            {{ "%.1f"|format((activity['distance_km'] or 0) / ((activity['running_time_seconds'] or 1) / 3600)) }} km/h
+          {% else %}
+            0 km/h
+          {% endif %}
+        </span>
+        <span class="stat-label">Average Speed</span>
+      </div>
+    </div>
+    <div class="stat-card blue">
+      <div class="stat-icon"><i class="fa-solid fa-droplet"></i></div>
+      <div class="stat-info">
+        <span class="stat-value">{{ "%.1f"|format(activity['water_liters'] or 0) }} L</span>
+        <span class="stat-label">Water Intake</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="progress-grid">
+    <div class="progress-card">
+      <div class="progress-card-header">
+        <h3><i class="fa-solid fa-shoe-prints"></i> Step Goal</h3>
+        <span>{{ activity['steps'] or 0 }} / {{ step_goal }}</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill blue-fill" style="width: {{ step_progress }}%"></div>
+      </div>
+      <span class="progress-percent">{{ step_progress }}% complete</span>
+    </div>
+    <div class="progress-card">
+      <div class="progress-card-header">
+        <h3><i class="fa-solid fa-droplet"></i> Water Goal</h3>
+        <span>{{ "%.1f"|format(activity['water_liters'] or 0) }} / {{ water_goal }} L</span>
+      </div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill green-fill" style="width: {{ water_progress }}%"></div>
+      </div>
+      <span class="progress-percent">{{ water_progress }}% complete</span>
+    </div>
+  </div>
+
+  <div class="dashboard-grid">
+    <div class="dashboard-panel">
+      <h3><i class="fa-solid fa-chart-column"></i> Weekly Steps</h3>
+      <canvas id="stepsChart"></canvas>
+    </div>
+    <div class="dashboard-panel">
+      <h3><i class="fa-solid fa-chart-line"></i> Weekly Distance (km)</h3>
+      <canvas id="distanceChart"></canvas>
+    </div>
+    <div class="dashboard-panel">
+      <h3><i class="fa-solid fa-chart-area"></i> Weekly Calories</h3>
+      <canvas id="caloriesChart"></canvas>
+    </div>
+  </div>
+
+  <div class="dashboard-panel recent-runs">
+    <h3><i class="fa-solid fa-clock-rotate-left"></i> Recent Runs</h3>
+    {% if recent_runs %}
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Date</th><th>Distance</th><th>Duration</th><th>Avg Speed</th><th>Calories</th></tr>
+        </thead>
+        <tbody>
+          {% for run in recent_runs %}
+          <tr>
+            <td>{{ run['run_date'] }}</td>
+            <td>{{ "%.2f"|format(run['distance_km']) }} km</td>
+            <td>{{ (run['duration_seconds'] // 60) }} min {{ run['duration_seconds'] % 60 }}s</td>
+            <td>{{ run['avg_speed_kmh'] }} km/h</td>
+            <td>{{ run['calories'] }} kcal</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <p class="empty-state">No runs yet. <a href="{{ url_for('running') }}">Start your first run!</a></p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<script src="{{ url_for('static', filename='js/charts.js') }}"></script>
+{% endblock %}

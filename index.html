@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}ArzoSportTracker — Track Your Fitness Journey{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <span class="hero-badge"><i class="fa-solid fa-bolt"></i> Your fitness companion</span>
+    <h1>Track Every Step. <br> Crush Every Goal.</h1>
+    <p>ArzoSportTracker helps you monitor your steps, distance, calories, running routes,
+       and hydration — all in one clean, modern dashboard.</p>
+    <div class="hero-actions">
+      {% if current_user %}
+        <a href="{{ url_for('dashboard') }}" class="btn btn-primary btn-lg">Go to Dashboard <i class="fa-solid fa-arrow-right"></i></a>
+      {% else %}
+        <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Get Started <i class="fa-solid fa-arrow-right"></i></a>
+        <a href="{{ url_for('login') }}" class="btn btn-outline btn-lg">Login</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="section-header">
+    <h2>Everything You Need to Stay Active</h2>
+    <p>Powerful features wrapped in a simple, easy-to-use interface.</p>
+  </div>
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon"><i class="fa-solid fa-shoe-prints"></i></div>
+      <h3>Step Tracking</h3>
+      <p>Monitor your daily steps and stay on top of your movement goals.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+      <h3>Live Route Map</h3>
+      <p>See your running routes plotted live on OpenStreetMap.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><i class="fa-solid fa-fire"></i></div>
+      <h3>Calorie Calculator</h3>
+      <p>Estimate calories burned based on age, weight, time and distance.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><i class="fa-solid fa-droplet"></i></div>
+      <h3>Water Tracker</h3>
+      <p>Log your daily water intake and track progress toward your goal.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
+      <h3>Weekly Charts</h3>
+      <p>Visualize your weekly steps, distance, and calories at a glance.</p>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>
+      <h3>Activity History</h3>
+      <p>Review your full fitness history whenever you need it.</p>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="cta-content">
+    <h2>Ready to start your fitness journey?</h2>
+    <p>Join SportTracker today — it's free and takes less than a minute.</p>
+    {% if not current_user %}
+    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Create Free Account</a>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
