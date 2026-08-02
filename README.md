@@ -60,7 +60,7 @@ pip install -r requirements.txt
 python app.py
 ```
 
-The app will be available at **http://127.0.0.1:5000**. The SQLite database
+The app will be available at **https://sport-tracker-4.onrender.com/**. The SQLite database
 (`database/sports.db`) and all tables are created automatically the first
 time you run it.
 
